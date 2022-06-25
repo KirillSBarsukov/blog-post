@@ -42,6 +42,13 @@ export async function getUser(request: Request) {
   throw await logout(request);
 }
 
+export async function requireAdminUser(request: Request) {
+  const user = await requireUser(request);
+  if (user.email !== ENV.ADMIN_EMAIL) {
+    throw await logout(request);
+  }
+  return user;
+}
 export async function requireUserId(
   request: Request,
   redirectTo: string = new URL(request.url).pathname
